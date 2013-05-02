@@ -22,12 +22,13 @@
 
   </head>
 
-  <body>
+  <body data-story-type="Slideshow">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
                 <a class="brand" href="#">ELK Day of Service Project</a>
                 <p class="byline navbar-text">By ELK (Environmental Learning for Kids)</p>
+                <a id="btn-launch-survey" class="btn btn-primary pull-right" href="#">I'm Done</a>
                 <div class="nav-collapse collapse pull-right">
                     <nav id="nextprev" class="navbar-text pull-right">
                       <a href="#" class="prev" title="Previous"><i class="icon-chevron-left icon-white"></i></a>
@@ -145,8 +146,9 @@
     <script src="../../js/jquery-1.9.1.min.js"></script>
     <script src="../../js/jquery-migrate-1.1.1.min.js"></script>
     <script src="../../js/bootstrap.js"></script>
+    <script src="../../js/jquery.cookie.js"></script>
+    <script src="../../js/story.js"></script>
     <script src="js/reveal.min.js"></script>
-    <script src="../js/common.js"></script>
     <script type="text/javascript">
       $('#slideshow').height(($(window).innerHeight() - $('.navbar').height()) * .75);
       Reveal.initialize({

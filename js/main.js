@@ -2,10 +2,14 @@
   // App-wide options 
   _.defaults(storyTestOpts, { 
     ignoreCookies: false, // Ignore cookies
-    forceModal: false // Always use modal popup instead of full-screen
+    stories: {
+      'elk-poster': './stories/elk-poster/index.html',
+      'elk-linear': './stories/elk-linear/index.html',
+      'elk-node-graph': './stories/elk-node-graph/index.html',
+      'elk-slideshow': './stories/elk-slideshow/index.html',
+      'elk-compressed': './stories/elk-compressed/index.html'
+    }
   });
-  var googleFormUrlBase = 'https://docs.google.com/forms/d/11FO5El2U35pV8HIiidjQkpqKeE4t1nwfYWxugOwbIdE/viewform?embedded=true';
-  var googleFormUrl = googleFormUrlBase;
   // Story formats that the user has seen
   var seen = $.cookie('floodlight_storytest_seen');
   if (seen && !storyTestOpts.ignoreCookies) {
@@ -18,14 +22,14 @@
   var userId;
 
   // Get unseen story ids
-  function getStoryIds(sel, seen) {
-    return $(sel).map(function() {
-      var id = this.id.replace('story-', '');
+  function getStoryIds(seen) {
+    // HACK: This was fun to write, but is kind of ridiculous
+    return _.chain(storyTestOpts.stories).map(function(url, id) {
       if (seen[id]) {
         return undefined;
       }
       return id;
-    }).get();
+    }).reject(_.isUndefined).value();
   }
 
   // Mark a particular story as seen
@@ -35,11 +39,6 @@
       expires: 30,
       path: '/'
     });
-  }
-
-  function updateSurveyUrl(userId, storyType) {
-    googleFormUrl = googleFormUrlBase + '&entry.1498993524=' + userId +
-              '&entry.75722686=' + storyType;
   }
 
   /**
@@ -97,58 +96,8 @@
    * Launch the story viewer in fullscreen mode.
    */
   function showStory(id) {
-    var sel = '#story-' + id;
-    var userId = getUserId({
-      setRandom: true
-    });
-    var storyType = $(sel).data('survey-value');
-    var loadIframe = function() {
-      if ($(sel).data('story-src')) {
-        $(sel).attr('src', $(sel).data('story-src'));
-      }
-    };
-    var closeIframe = function() {
-      $(sel).hide();
-      showSurvey();
-    };
-    updateSurveyUrl(userId, storyType);
     setSeen(id);
-    $(sel).show();
-    if (BigScreen.enabled && !storyTestOpts.forceModal) {
-        BigScreen.request($(sel)[0], loadIframe, closeIframe);
-    }
-    else {
-      // Fullscreen API isn't available, launch the story in a full-window-
-      // sized modal overlay
-      $(sel).modal({
-        minHeight: window.innerHeight,
-        minWidth: window.innerWidth,
-        // Make sure modal has a higher z-index than the bootstrap
-        // header
-        zIndex: 2000,
-        onShow: function(dialog) {
-          $(sel).width(window.innerWidth);
-          $(sel).height(window.innerHeight);
-          loadIframe();
-        },
-        // This doesn't seem to work. We'll handle this manually using
-        // window.postMessage between the parent and child iframes below
-        //escClose: true,
-        escClose: false,
-        onClose: closeIframe
-      });
-      // HACK: Listen to window.postMessage from the child (story) iframe
-      // and close the modal when the escape key is pressed
-      $(window).on("message", function(e) {
-        var message = e.originalEvent.data;
-        // Escape key has keycode of 27
-        if (message === "storytest:keydown:27") {
-          $.modal.close();
-          // Unbind the current event listener
-          $(window).off("message", arguments.callee);
-        }
-      });
-    }
+    window.location = storyTestOpts.stories[id];
   }
 
   function getRandomStoryId(storyIds) {
@@ -157,7 +106,7 @@
   }
 
   function updateIntro() {
-    var storyIds = getStoryIds('iframe.story-embed', seen);
+    var storyIds = getStoryIds(seen);
     // No remaining stories, 
     if (!storyIds.length) {
       $('#intro-default').hide();
@@ -189,7 +138,7 @@
     updateIntro();
     displayUserId();
     $('#launch-viewer').click(function() {
-      var storyIds = getStoryIds('iframe.story-embed', seen);
+      var storyIds = getStoryIds(seen);
       if (storyIds.length) {
         showStory(getRandomStoryId(storyIds));
       }

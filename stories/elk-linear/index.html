@@ -31,7 +31,7 @@
     <link rel="shortcut icon" href="./ico/favicon.png">
   </head>
 
-  <body>
+  <body data-story-type="Linear">
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -42,6 +42,7 @@
           </button>
           <a class="brand" href="#">ELK Day of Service Project</a>
           <p class="byline navbar-text">By ELK (Environmental Learning for Kids)</p>
+          <a id="btn-launch-survey" class="btn btn-primary pull-right" href="#">I'm Done</a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
                 <li class="dropdown">
@@ -64,11 +65,6 @@
           </div><!--/.nav-collapse -->
         </div>
       </div>
-    </div>
-
-    <div id="instructions-alert" class="alert container">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <p>Please read the entire story, then hit the escape key to continue</p>
     </div>
 
     <div class="container">
@@ -150,6 +146,7 @@
     <script src="../../js/jquery-1.9.1.min.js"></script>
     <script src="../../js/jquery-migrate-1.1.1.min.js"></script>
     <script src="../../js/bootstrap.js"></script>
-    <script src="../js/common.js"></script>
+    <script src="../../js/jquery.cookie.js"></script>
+    <script src="../../js/story.js"></script>
   </body>
 </html>
