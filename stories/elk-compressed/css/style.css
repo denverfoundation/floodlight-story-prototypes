@@ -28,6 +28,6 @@ figure#images figcaption {
   font-size:1em;
 }
 
-p {
+p.not('.byline') {
   margin:1em 0;
 }
