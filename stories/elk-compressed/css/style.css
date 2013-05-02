@@ -1,10 +1,13 @@
 figure#images {
+  position: relative;
   width:100%;
   margin:0;
   padding:1em 0;
   background:black;
   border:1px solid black;
+  min-height: 150px;
 }
+
 figure#images img {
   box-sizing:border-box;
   -moz-box-sizing:border-box;
@@ -17,6 +20,9 @@ figure#images img {
 }
 
 figure#images figcaption {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
   color:white;
   text-align:center;
   clear:both;

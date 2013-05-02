@@ -49,7 +49,7 @@
 
     <div class="container">
       <figure id="images">
-        <img src="../img/ELK1-1920x1280.jpg" title="Nicole talking to ELK students." data-caption="ELK alumni, Nicole, talks to current ELK students about her experiences and how ELK helped her."/>
+        <img src="../img/ELK1-1920x1280.jpg" title="Nicole talking to ELK students." data-original-title="Nicole talking to ELK students." data-caption="ELK alumni, Nicole, talks to current ELK students about her experiences and how ELK helped her."/>
         <img src="../img/ELK2-1920x1280.jpg" title="Before the wall was painted by ELK volunteers and students." data-caption="This photo shows the wall before it had been painted by the ELK students and volunteers."/>
         <img src="../img/ELK3-1920x1280.jpg" title="The work begins..." data-caption="The ELK kids and a few city employees painting a wall that was covered in graffiti." />
         <img src="../img/ELK4-1920x1280.jpg" title="Accomplishment" data-caption="After the wall was painted."/>
@@ -84,33 +84,63 @@
     <script src="../../js/jquery-migrate-1.1.1.min.js"></script>
     <script src="../../js/bootstrap.js"></script>
     <script src="../../js/jquery.cookie.js"></script>
+    <script src="../../js/jquery.waitforimages.min.js"></script> 
     <script src="../../js/story.js"></script>
     <script type="text/javascript">
     (function() {
-      var originalCaption = $('figure figcaption').html();
-      $('figure img').hover(function() {
-        if ($(this).data('caption')) {
-          $('figure figcaption').html($(this).data('caption'));
+        var imgSel = 'figure img'; // CSS selector for images of interest
+        /**
+         * Show an instructional popover so users know about the hover effect
+         * on the images.
+         */
+        function showPopover() {
+          $(imgSel).first().popover({
+            content: 'Hover over images to learn more', 
+            trigger: 'manual'
+          }).popover('show');
+          $(imgSel).one('hover', function() {
+            // Hide the popover once users use it once 
+            $(imgSel).first().popover('hide');
+            // Also hide the "I'm done" button popover since
+            // in this story format, users aren't likely to scroll/
+            // click
+            $("#btn-launch-survey").popover('hide');
+          });
         }
-      }, function() {
-        $('figure figcaption').html(originalCaption);
-      })
-      
-      var $imgs = $('figure img');
-      var idealHeight = 250;
-      $imgs.each(function() { 
-        var $img = $(this);
-        $img.width($img.width() * (idealHeight / $img.height()));
+
+        function scaleImages() {
+          var $imgs = $(imgSel);
+          var idealHeight = 250;
+          $imgs.each(function() { 
+            var $img = $(this);
+            $img.width($img.width() * (idealHeight / $img.height()));
+          });
+          
+          var availableWidth = $('figure').width();
+          var totalWidth = 0;
+          $imgs.each(function() { totalWidth += $(this).width(); });
+          $imgs.each(function() {
+            var $img = $(this);
+            $img.width($img.width() * (availableWidth / totalWidth));
+          });
+          $imgs.show();
+          showPopover();
+       }
+
+      $(function() {
+        $(imgSel).hide();
+        $('figure').waitForImages(scaleImages);
+
+        // Bind hover effect for images
+        var originalCaption = $('figure figcaption').html();
+        $(imgSel).hover(function() {
+          if ($(this).data('caption')) {
+            $('figure figcaption').html($(this).data('caption'));
+          }
+        }, function() {
+          $('figure figcaption').html(originalCaption);
+        })
       });
-      
-      var availableWidth = $('figure').width();
-      var totalWidth = 0;
-      $imgs.each(function() { totalWidth += $(this).width(); });
-      $imgs.each(function() {
-        var $img = $(this);
-        $img.width($img.width() * (availableWidth / totalWidth));
-      });
-      
     })();
     </script>
   </body>
