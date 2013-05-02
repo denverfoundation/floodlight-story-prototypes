@@ -139,6 +139,12 @@
     displayUserId();
     $('#launch-viewer').click(function() {
       var storyIds = getStoryIds(seen);
+      // Call getUserId again, this time with setRandom set to true
+      // so that a UUID will be created if the user didn't specify an
+      // e-mail address.
+      getUserId({
+        setRandom: true
+      });
       if (storyIds.length) {
         showStory(getRandomStoryId(storyIds));
       }
