@@ -124,6 +124,9 @@
             $img.width($img.width() * (availableWidth / totalWidth));
           });
           $imgs.show();
+          $imgs.one('hover', function() {
+            $imgs.addClass('activated');
+          });
           showPopover();
        }
 

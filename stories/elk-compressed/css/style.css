@@ -19,6 +19,14 @@ figure#images img {
   float:left;
 }
 
+figure#images img.activated {
+  opacity: 0.5;
+}
+
+figure#images img.activated:hover {
+  opacity: 1;
+}
+
 figure#images figcaption {
   position: absolute;
   width: 100%;
