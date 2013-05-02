@@ -1,0 +1,19 @@
+section {
+  overflow: hidden;
+}
+
+figure {
+  border: 1px solid rgba(0, 0, 0, 1);
+  padding: 4px;
+}
+
+/* HACK: Use this when images are portrait oriented to force
+ * border to wrap around the image.
+ */
+figure.portrait {
+  display: table;
+}
+
+figcaption {
+  padding-top: 4px;
+}
