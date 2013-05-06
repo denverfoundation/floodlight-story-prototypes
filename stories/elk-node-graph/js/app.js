@@ -133,8 +133,13 @@
     $('.content').prepend($s.fadeIn());
     $('.canvas').popover('hide');
   };
+
+  app.clearSections = function() {
+    $('.content .section').remove();
+  };
   
   app.showSection = function(section) {
+    app.clearSections();
     app.showSectionById(section.id);
   };
   
